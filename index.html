@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>registro 2</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <form id="registroForm">
+        <h2>Registrar Usuario</h2>
+        <label for="nombreCompleto">Nombre Completo</label>
+        <input 
+            type="text" id="nombreCompleto" name="NombreCompleto" placeholder="Nombre completo" required pattern="^[A-ZÁÉÍÓÚÑa-záéíóúñ]+(\s[A-ZÁÉÍÓÚÑa-záéíóúñ]+)+$"/>
+        <p id="nombreError" class="error"></p>
+        <label for="fechaNacimiento">Fecha de Nacimiento</label>
+        <input 
+        type="date" id="fechaNacimiento" name="FechaNacimiento" required/>
+        <p id="fechaError" class="error"></p>
+        <label for="correo">Correo Electrónico</label>
+        <input 
+        type="email" id="correo" name="Correo" placeholder="chanchito@dominio.com" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"/>
+        <p id="correoError" class="error"></p>
+        <label for="contraseña">Contraseña</label>
+        <input 
+        type="password" id="contraseña" name="Contraseña" placeholder="Mínimo 8 caracteres" required pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"/>
+        <p id="contraseñaError" class="error"></p>
+        <button type="submit">Iniciar Sesion</button>
+    </form>
+    <script>
+        const form = document.getElementById("registroForm");
+        let intentosFallidos = 0;
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const nombre = document.getElementById("nombreCompleto").value;
+            const fechaNacimiento = document.getElementById("fechaNacimiento").value;
+            const correo = document.getElementById("correo").value;
+            const contraseña = document.getElementById("contraseña").value;
+            document.getElementById("nombreError").textContent = "";
+            document.getElementById("fechaError").textContent = "";
+            document.getElementById("correoError").textContent = "";
+            document.getElementById("contraseñaError").textContent = "";
+            const nombreReg = /^[A-ZÁÉÍÓÚÑa-záéíóúñ]+(\s[A-ZÁÉÍÓÚÑa-záéíóúñ]+)+$/;
+            const correoReg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            const contraseñaReg = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            let valido = true;
+
+            if (!nombreReg.test(nombre)) {
+                document.getElementById("nombreError").textContent = "Intente nuevamente";
+                valido = false;
+            }
+            if (!fechaNacimiento) {
+                document.getElementById("fechaError").textContent = "Selecciona una fecha valida";
+                valido = false;
+            }
+            if (!correoReg.test(correo)) {
+                document.getElementById("correoError").textContent = "Intenta de nuevo por favor";
+                valido = false;
+            }
+            if (!contraseñaReg.test(contraseña)) {
+                document.getElementById("contraseñaError").textContent = "Ingresa una contraseña valida, inteta de nuevo";
+                valido = false;
+                intentosFallidos++;
+            }
+            if (intentosFallidos >= 3) {
+                alert("Muchos intentos fallidos, volviendo a cargar xd");
+                form.reset();
+                intentosFallidos = 0;
+                return;
+            }
+            if (valido) {
+                alert("formulario valido, bienvenido");
+                form.reset();
+                intentosFallidos = 0;
+                const usuario = {
+                    nombre: nombre,
+                    fechaNacimiento: fechaNacimiento,
+                    correo: correo,
+                };
+                localStorage.setItem("usuario",JSON.stringify(usuario));
+                window.location.href = "REGISTRO_2/index.tml";
+            }
+        });
+    </script>
+</body>
+</html>
